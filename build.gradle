@@ -1,0 +1,35 @@
+group 'twitterapi'
+version '20170326'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+configurations {
+    extraLibs
+}
+
+jar {
+    baseName = 'twitterapi'
+    version = '20170326'
+    mainClassName = 'twitterapi.Main'
+    manifest {
+        attributes(
+                'Main-Class': 'twitterapi.Main'
+        )
+    }
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.json:json:20160810";
+    extraLibs group: 'org.json', name: 'json', version: '20160810'
+    configurations.compile.extendsFrom(configurations.extraLibs)
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
